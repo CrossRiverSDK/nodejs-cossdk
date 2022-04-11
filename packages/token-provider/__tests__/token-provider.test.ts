@@ -7,8 +7,8 @@ describe('token-provider', () => {
     test('get token', async () => {
         let tokenProvider = new TokenProvider({
             authorityUrl: 'https://oauthtest.crbnj.net',
-            clientId: 'RolodexTestClient',
-            clientSecret: 'a0e3b423c0b24215a6a97d9c72525c6f',
+            clientId: 'myTestClient',
+            clientSecret: 'myTestPassword',
             scopes: 'rolodexapi'
         })
 
