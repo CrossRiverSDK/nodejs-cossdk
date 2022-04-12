@@ -2,14 +2,14 @@ import { TokenProviderConfiguration } from "./interfaces/token-provider-configur
 import { Issuer } from "openid-client";
 import AwaitLock from "await-lock";
 import { TokenRequest } from "./interfaces/token-request";
-import { AggregateError } from "@cossdk/common";
+import { AggregateError, stringIsNullOrEmpty } from '@cossdk/common';
 
 const NodeCache = require("node-cache");
 
 export class TokenProvider
 {
     config: TokenProviderConfiguration;
-    cache: any;
+    cache;
     lock: AwaitLock;
 
     constructor(config:TokenProviderConfiguration) {
@@ -19,19 +19,17 @@ export class TokenProvider
     }
 
     async getJwtToken(tokenRequest?: TokenRequest):Promise<string> {
-        let request = tokenRequest ?? {} as TokenRequest;
-        request.clientId = request.clientId ?? this.config.clientId;
-        request.clientSecret = request.clientSecret ?? this.config.clientSecret;
-        request.scopes = request.scopes ?? this.config.scopes;
-        let authorityUrl = this.config.authorityUrl;
 
-        let errors:Array<Error> = [];
-        if (!request.clientId)
-            errors.push(new Error("clientId is null or undefined"));
-        if (!request.clientSecret)
-            errors.push(new Error("clientSecret is null or undefined"));
-        if (!authorityUrl)
-            errors.push(new Error("authorityUrl is null or undefined"));
+        const request = this.getTokenRequest(tokenRequest) ?? this.config;
+        const authorityUrl = this.config.authorityUrl;
+
+        const errors:Array<Error> = [];
+        if (stringIsNullOrEmpty(request.clientId))
+            errors.push(new Error("clientId is empty, null or undefined"));
+        if (stringIsNullOrEmpty(request.clientSecret))
+            errors.push(new Error("clientSecret is empty, null or undefined"));
+        if (stringIsNullOrEmpty(authorityUrl))
+            errors.push(new Error("authorityUrl is empty, null or undefined"));
 
         if (errors.length > 0)
             throw new AggregateError(errors);
@@ -40,20 +38,20 @@ export class TokenProvider
             try {
                 await this.lock.acquireAsync();
 
-                let key = `${request.clientId}-${request.scopes}`;
-                let token = this.cache.get(key);
+                const key = `${request.clientId}-${request.scopes}`;
+                const token = this.cache.get(key);
 
                 if (token)
                     return token;
 
-                let issuer = await Issuer.discover(authorityUrl);
+                const issuer = await Issuer.discover(authorityUrl);
 
-                let client = new issuer.Client({
-                    client_id: request.clientId,
+                const client = new issuer.Client({
+                    client_id: request.clientId!,
                     client_secret: request.clientSecret,
                 }); // => Client
 
-                let tokenSet = await client.grant({
+                const tokenSet = await client.grant({
                     'grant_type': 'client_credentials',
                     'scope': request.scopes
                 });
@@ -72,5 +70,17 @@ export class TokenProvider
                 this.lock.release();
             }
         }
+    }
+
+    private getTokenRequest(request?: TokenRequest):TokenRequest | undefined
+    {
+        if (request)
+        {
+            request.clientId = request.clientId ?? this.config.clientId;
+            request.clientSecret = request.clientSecret ?? this.config.clientSecret;
+            request.scopes = request.scopes ?? this.config.scopes;
+        }
+
+        return request;
     }
 }

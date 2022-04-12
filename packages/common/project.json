@@ -1,6 +1,7 @@
 {
   "root": "packages/common",
   "sourceRoot": "packages/common/src",
+  "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",
@@ -28,5 +29,6 @@
       }
     }
   },
+  "implicitDependencies": ["common"],
   "tags": []
 }
