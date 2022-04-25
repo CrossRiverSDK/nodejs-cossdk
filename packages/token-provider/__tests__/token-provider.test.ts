@@ -1,30 +1,53 @@
 import { AggregateError } from "@cossdk/common";
+import { executeApiRaw, initializeApi } from "../src/lib/authenticated-fetch";
 import { TokenProviderConfiguration } from "../src/interfaces/token-provider-configuration";
-import { TokenProvider } from "../src/token-provider";
+import { TokenProvider } from "../src/lib/token-provider";
 
 describe('token-provider', () => {
     test('get token and cache it', async () => {
-        let tokenProvider = new TokenProvider({
+        const tokenProvider = new TokenProvider({
             authorityUrl: 'https://oauthtest.crbnj.net',
             clientId: 'myTestClient',
             clientSecret: 'myTestPassword'
         })
 
-        let token = await tokenProvider.getJwtToken();
+        const token = await tokenProvider.getJwtToken();
         expect(token).not.toBeNull();
 
-        let cachedToken = await tokenProvider.getJwtToken();
+        const cachedToken = await tokenProvider.getJwtToken();
         expect(cachedToken).toBe(token);
     });
 
+    test('call api successfully', async () => {
+        await initializeApi({
+            authorityUrl: 'https://oauthtest.crbnj.net',
+            clientId: 'myTestClient',
+            clientSecret: 'myTestPassword'
+        });
+
+        const res = await executeApiRaw('https://lendingqa.crbcloud.com/Hooks/v2/Types', 'GET')
+        
+
+        expect(res).not.toBeNull();
+    });
+
     test('throw exceptions when config is messed up', async () => {
-        let config:TokenProviderConfiguration = {
+        const config:TokenProviderConfiguration = {
             authorityUrl: ''
         }
 
         await expect(async () => {
-            let provider = new TokenProvider(config)
-            let token = await provider.getJwtToken();
+            try
+            {
+                const provider = new TokenProvider(config)
+                await provider.getJwtToken();
+            }
+            catch(error)
+            {
+                const e = error as AggregateError;
+                expect(e.errors.length).toBe(3);
+                throw(error);
+            }
         }).rejects.toThrow(AggregateError);
     });
 });

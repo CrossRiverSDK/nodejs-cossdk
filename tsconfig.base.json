@@ -16,6 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@cossdk/common": ["packages/common/src/index.ts"],
+      "@cossdk/hooks": ["packages/hooks/src/index.ts"],
+      "@cossdk/lending": ["packages/lending/src/index.ts"],
       "@cossdk/token-provider": ["packages/token-provider/src/index.ts"]
     }
   },

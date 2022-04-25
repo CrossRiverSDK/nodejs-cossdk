@@ -15,6 +15,7 @@
     "@nrwl/linter": "13.10.1",
     "@nrwl/workspace": "13.10.1",
     "@types/jest": "27.0.2",
+    "@types/mocha": "^9.1.0",
     "@types/node": "16.11.7",
     "@typescript-eslint/eslint-plugin": "~5.18.0",
     "@typescript-eslint/parser": "~5.18.0",

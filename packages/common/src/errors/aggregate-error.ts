@@ -1,6 +1,6 @@
 export class AggregateError extends Error
 {
-    errors:Array<Error>;
+    public errors:Array<Error>;
 
     constructor(errors:Array<Error>, message?:string) {
         let msg = (message ?? 'An aggregate error has occurred') + ':\n\n';

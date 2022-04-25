@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-var-requires */
 const randomstring = require("randomstring");
 import * as crypto from 'crypto';
 
@@ -30,7 +32,7 @@ export class MockClient
 
     async grant(body: GrantBody, extras?: GrantExtras): Promise<TokenSet>
     {
-        let tokenSet = new TokenSet();
+        const tokenSet = new TokenSet();
 
         tokenSet.access_token = randomstring.generate();
         tokenSet.expires_in = 3600;

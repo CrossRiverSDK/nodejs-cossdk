@@ -2,6 +2,8 @@
   "version": 2,
   "projects": {
     "common": "packages/common",
+    "hooks": "packages/hooks",
+    "lending": "packages/lending",
     "token-provider": "packages/token-provider"
   }
 }
