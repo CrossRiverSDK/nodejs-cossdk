@@ -71,6 +71,6 @@ export class Registrations extends HooksBase {
             query.set('PageSize', filter.pageSize);
         }
 
-        return await executeGetApi<ApiResponse<PagedResults<Registrations>>>('/Hooks/v2/Registrations', query);
+        return await executeGetApi<ApiResponse<PagedResults<Registrations>>>('/Hooks/v2/Registrations', query, this.apiKey);
     }
 }

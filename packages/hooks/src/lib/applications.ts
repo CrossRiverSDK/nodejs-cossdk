@@ -19,7 +19,7 @@ export class Applications extends HooksBase {
     get(name: string): Promise<ApiResponse<Application>> {
         this.validateInitialization();
 
-        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Applications/${name}`);
+        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Applications/${name}`, undefined, this.apiKey);
     }
 
     /**
@@ -42,6 +42,6 @@ export class Applications extends HooksBase {
             query.set('ToCreated', filter.toCreated);
         }
 
-        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Applications`, query);
+        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Applications`, query, this.apiKey);
     }
 }

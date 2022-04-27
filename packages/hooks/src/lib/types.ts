@@ -18,45 +18,47 @@ export class Types extends HooksBase {
     get(id: string): Promise<ApiResponse<Type>> {
         this.validateInitialization();
 
-        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Types/${id}`);
+        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, this.apiKey);
     }
 
     /**
      * Gets all types.
      */
-    getAll(filter: TypesFilter): Promise<ApiResponse<Array<Type>>> {
+    getAll(filter?: TypesFilter): Promise<ApiResponse<Array<Type>>> {
         this.validateInitialization();
 
         const query = new QueryString();
+        if (filter)
+        {
+            if (filter.applicationName) {
+                query.set('ApplicationName', filter.applicationName);
+            }
 
-        if (filter.applicationName) {
-            query.set('ApplicationName', filter.applicationName);
+            if (filter.name) {
+                query.set('Name', filter.name);
+            }
+
+            if (filter.requirePayload) {
+                query.set('RequirePayload', filter.requirePayload);
+            }
+
+            if (filter.fromDefaultRetryCount) {
+                query.set('FromDefaultRetryCount', filter.fromDefaultRetryCount);
+            }
+
+            if (filter.toDefaultRetryCount) {
+                query.set('ToDefaultRetryCount', filter.toDefaultRetryCount);
+            }
+
+            if (filter.fromCreated) {
+                query.set('FromCreated', filter.fromCreated);
+            }
+
+            if (filter.toCreated) {
+                query.set('ToCreated', filter.toCreated);
+            }
         }
 
-        if (filter.name) {
-            query.set('Name', filter.name);
-        }
-
-        if (filter.requirePayload) {
-            query.set('RequirePayload', filter.requirePayload);
-        }
-
-        if (filter.fromDefaultRetryCount) {
-            query.set('FromDefaultRetryCount', filter.fromDefaultRetryCount);
-        }
-
-        if (filter.toDefaultRetryCount) {
-            query.set('ToDefaultRetryCount', filter.toDefaultRetryCount);
-        }
-
-        if (filter.fromCreated) {
-            query.set('FromCreated', filter.fromCreated);
-        }
-
-        if (filter.toCreated) {
-            query.set('ToCreated', filter.toCreated);
-        }
-
-        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Types`, query);
+        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Types`, query, this.apiKey);
     }
 }

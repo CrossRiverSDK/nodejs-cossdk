@@ -1,37 +1,31 @@
 import { stringIsNullOrEmpty } from "@cossdk/common";
 import { initializeTokenProvider } from "@cossdk/token-provider";
 import { HooksConfiguration } from "../models/hooks-configuration";
-import { HooksOptions } from "../models/hooks-options";
 import { Events } from "./events";
 import { Registrations } from "./registrations";
 import { Types } from "./types";
+import { Applications } from "./applications";
 
-export class Hooks implements HooksOptions {
+export class Hooks  {
 
-  public baseUrl:string;
-  
-  public Events: Events;
-  public Registrations: Registrations;
-  public Types: Types;
-  
-  constructor()
-  {
-    this.baseUrl = '';
-    this.Events = new Events(this);
-    this.Registrations = new Registrations(this);
-    this.Types = new Types(this);
-  }
+  static Applications: Applications;
+  static Types: Types;
+  static Registrations: Registrations;
+  static Events: Events;   
 
-  initialize(config: HooksConfiguration, apiKey: string) {
-    if (stringIsNullOrEmpty(apiKey))
+  static initialize(config: HooksConfiguration) {
+    if (stringIsNullOrEmpty(config.apiKey))
       throw new Error('You must supply an api key.');
 
     if (stringIsNullOrEmpty(config.baseUrl))
       throw new Error('You must supply a base url.');
 
-    initializeTokenProvider(config, apiKey);
+    initializeTokenProvider(config, config.apiKey);
 
-    this.baseUrl = config.baseUrl;
+    Hooks.Applications = new Applications(config);
+    Hooks.Types = new Types(config);
+    Hooks.Registrations = new Registrations(config);
+    Hooks.Events = new Events(config);
   }
 }
 

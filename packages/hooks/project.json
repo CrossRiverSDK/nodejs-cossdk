@@ -1,6 +1,7 @@
 {
   "root": "packages/hooks",
   "sourceRoot": "packages/hooks/src",
+  "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nrwl/js:tsc",

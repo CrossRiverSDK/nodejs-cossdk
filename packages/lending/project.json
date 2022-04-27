@@ -26,7 +26,7 @@
         "tsConfig": "packages/lending/tsconfig.lib.json",
         "assets": ["packages/lending/*.md"]
       }
-    },   
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

@@ -1,6 +1,7 @@
 import { QueryString } from "@cossdk/common";
 import { TokenProviderConfiguration } from "../interfaces/token-provider-configuration";
 import { TokenProvider } from "./token-provider";
+import { request, RequestOptions } from "https";
 
 const tokenProviders = new Map<string, TokenProvider>();
 
@@ -33,31 +34,92 @@ export async function executeApi<TReqeust, TResponse>(resource: string, method: 
     return JSON.parse(res) as TResponse;
 }
 
-export async function executeApiRaw(resource: string, method: string, request?: string, query?: QueryString, apiKey?: string): Promise<string> {
-    
-    const key = apiKey ?? '';
-    const tokenProvider = tokenProviders.get(key);
-    if (!tokenProvider)
-        throw new Error("Can not find token provider.  Please call initializeApi with the appropriate apiKey first.");
+export function executeApiRaw(resource: string, method: string, body?: string, query?: QueryString, apiKey?: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        try
+        {
+            const key = apiKey ?? '';
+            const tokenProvider = tokenProviders.get(key);
 
-    const token = await tokenProvider.getJwtToken();
-    const headers = new Headers({
-        'Authorization': `Bearer ${token}`
+            if (!tokenProvider)
+                throw new Error("Can not find token provider.  Please call initializeTokenProvider with the appropriate apiKey first.");
+        
+            tokenProvider.getJwtToken().then(token => {
+                try
+                {
+                    const requestOptions:RequestOptions = {
+                        method: method,
+                        rejectUnauthorized: false
+                    };
+
+                    requestOptions.headers = {
+                        'Authorization': `Bearer ${token}`
+                    };
+
+                    if (body) {
+                        requestOptions.headers['Content-Type'] = 'application/json';
+                        requestOptions.headers['Content-Length'] = body.length;
+                    }
+
+                    if (query)
+                        resource += query.toString(resource.indexOf('?') > -1 ? '' : '?');
+
+                    const req = request(resource, requestOptions, res => {
+                        let statusCode = res.statusCode;
+                        //if (res.statusCode < 200 || res.statusCode >= 300)
+                        //    return reject(new Error(``));
+                        const body:Uint8Array[] = [];
+
+                        res.on('data', chunk => body.push(chunk));
+                        res.on('end', () => {
+                            try{
+                                const str = Buffer.concat(body).toString();
+                                if (!statusCode)
+                                    statusCode = 0;
+    
+                                if (statusCode < 200 || statusCode >= 300)
+                                    reject(new Error(`An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`));
+                                else
+                                    resolve(str);
+                            } catch(e) {
+                                reject(e);
+                            }
+                        });
+                        res.on('error', () =>{
+                            const str = Buffer.concat(body).toString();
+                            if (!statusCode)
+                                statusCode = 0;
+
+                            reject(new Error(`An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`));
+                        });
+                    });
+
+                    if (body) {
+                        req.write(body);
+                    }
+
+                    req.on('error', e => {
+                        reject(e);
+                    })
+
+                    req.on('timeout', () => {
+                        reject(new Error(`An timeout occured calling resource: ${resource} with method ${method} and body ${body}.`));
+                    })
+
+                    req.end();
+                }
+                catch(e)
+                {
+                    reject(e);
+                }
+            })
+            .catch(reason => {
+                reject(reason)
+            });
+        }
+        catch(e)
+        {
+            reject(e);
+        }
     });
-
-    const reqInit: RequestInit = {
-        method: method,
-        headers: headers
-    };
-
-    if (request) {
-        headers.append('Content-Type', 'application/json');
-        reqInit.body = request;
-    }
-
-    if (query)
-        resource += query.toString(resource.indexOf('?') > -1 ? '' : '?');
-    
-    const res = await fetch(resource, reqInit);
-    return await res.json();
 }

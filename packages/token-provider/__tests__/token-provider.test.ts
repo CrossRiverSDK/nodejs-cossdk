@@ -1,5 +1,5 @@
 import { AggregateError } from "@cossdk/common";
-import { executeApiRaw, initializeApi } from "../src/lib/authenticated-fetch";
+import { executeApiRaw, initializeTokenProvider } from "../src/lib/authenticated-fetch";
 import { TokenProviderConfiguration } from "../src/interfaces/token-provider-configuration";
 import { TokenProvider } from "../src/lib/token-provider";
 
@@ -19,14 +19,13 @@ describe('token-provider', () => {
     });
 
     test('call api successfully', async () => {
-        await initializeApi({
+        await initializeTokenProvider({
             authorityUrl: 'https://oauthtest.crbnj.net',
             clientId: 'myTestClient',
             clientSecret: 'myTestPassword'
         });
 
         const res = await executeApiRaw('https://lendingqa.crbcloud.com/Hooks/v2/Types', 'GET')
-        
 
         expect(res).not.toBeNull();
     });

@@ -12,6 +12,10 @@ export abstract class HooksBase {
         return this.options.baseUrl.replace(/\/+$/, '');
     }
 
+    protected get apiKey() {
+        return this.options.apiKey;
+    }
+
     protected validateInitialization()
     {
         if (stringIsEmpty(this.options.baseUrl))

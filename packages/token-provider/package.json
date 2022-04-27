@@ -1,10 +1,10 @@
 {
   "name": "@cossdk/token-provider",
   "version": "0.0.1",
+  "type": "commonjs",
   "dependencies": {
     "await-lock": "^2.1.0",
     "node-cache": "^5.1.2",
-    "node-fetch": "^3.2.3",
     "openid-client": "^5.1.4"
   },
   "devDependencies": {
