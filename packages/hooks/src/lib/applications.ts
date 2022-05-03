@@ -3,7 +3,6 @@ import { executeGetApi } from "@cossdk/token-provider";
 import { Application } from "../models/application";
 import { ApplicationsFilter } from "../models/applications-filter";
 import { HooksOptions } from "../models/hooks-options";
-import { Type } from "../models/type";
 import { HooksBase } from "./hooks-base";
 
 export class Applications extends HooksBase {
@@ -16,16 +15,16 @@ export class Applications extends HooksBase {
     /**
      * Gets an application.
      */
-    get(name: string): Promise<ApiResponse<Application>> {
+    async get(name: string): Promise<ApiResponse<Application>> {
         this.validateInitialization();
 
-        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Applications/${name}`, undefined, this.apiKey);
+        return await executeGetApi<ApiResponse<Application>>(`${this.baseUrl}/Hooks/v2/Applications/${name}`, undefined, undefined, this.apiKey);
     }
 
     /**
      * Gets all applications.
      */
-    getAll(filter: ApplicationsFilter): Promise<ApiResponse<Array<Application>>> {
+    async getAll(filter: ApplicationsFilter): Promise<ApiResponse<Array<Application>>> {
         this.validateInitialization();
 
         const query = new QueryString();
@@ -42,6 +41,6 @@ export class Applications extends HooksBase {
             query.set('ToCreated', filter.toCreated);
         }
 
-        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Applications`, query, this.apiKey);
+        return await executeGetApi<ApiResponse<Array<Application>>>(`${this.baseUrl}/Hooks/v2/Applications`, query, undefined, this.apiKey);
     }
 }

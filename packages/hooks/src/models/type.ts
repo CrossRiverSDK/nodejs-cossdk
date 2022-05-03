@@ -7,7 +7,7 @@ export interface Type
     requirePayload: boolean;
     payloadType: string;
     defaultRetryCount: number;
-    defaultRetryDelay: TimeSpan;
     active: boolean;
     created: Date;
+    defaultRetryDelay: TimeSpan;
 }

@@ -1,7 +1,7 @@
 import { HookType } from "../enums/hook-type";
 import { SortDirection } from "../enums/sort-direction";
 
-export interface RegistrationsFilter {
+export class RegistrationsFilter {
     applicationName?: string;
     hookName?: string;
     hookServiceId?: string;

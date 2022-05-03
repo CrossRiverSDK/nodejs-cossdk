@@ -135,10 +135,35 @@ export class TimeSpan {
         return this.seconds.toString().padStart(2, '0');
     }
 
-    toJSON()
+    toJSON() : string
     {
         return `${this.totalHoursPaddedString}:${this.minutesPaddedString}:${this.secondsPaddedString}`;
     }
+
+	toString() : string
+    {
+        return this.toJSON();
+    }
+
+	static fromMinutes(minutes:number): TimeSpan
+	{
+		return new TimeSpan(minutes * MILLISECONDS_IN_A_MINUTE);
+	}
+
+	static fromJSON(serialized:string | TimeSpan):TimeSpan
+	{
+		serialized = serialized.toString();
+		
+		const parts = /(\d{2}):([0-5]\d):([0-5]\d)/.exec(serialized);
+		if (!parts)
+			throw new Error(`string ${serialized} is not a valid TimeSpan.`);
+
+		const ms = (parseInt(parts[1]) * MILLISECONDS_IN_AN_HOUR) +
+				   (parseInt(parts[2]) * MILLISECONDS_IN_A_MINUTE) +
+				   (parseInt(parts[3]) * MILLISECONDS_IN_A_SECOND);
+
+		return new TimeSpan(ms);
+	}
 
 	private floorValue(origValue:number, maxValue: number) {
 		return { modulu: origValue % maxValue, addition: Math.floor(origValue / maxValue) };

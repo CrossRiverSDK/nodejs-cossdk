@@ -1,4 +1,7 @@
-import { QueryString } from "@cossdk/common";
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { HttpError, HttpMethod, QueryString } from "@cossdk/common";
 import { TokenProviderConfiguration } from "../interfaces/token-provider-configuration";
 import { TokenProvider } from "./token-provider";
 import { request, RequestOptions } from "https";
@@ -14,27 +17,37 @@ export function initializeTokenProvider(config: TokenProviderConfiguration, apiK
     tokenProviders.set(key, new TokenProvider(config));
 }
 
-export async function executeGetApi<TResponse>(resource: string, query?: QueryString, apiKey?: string): Promise<TResponse> {
+export async function executeGetApi<TResult>(resource: string, query?: QueryString, mapper?: (obj:TResult) => void, apiKey?: string): Promise<TResult> {
+    const resRaw = await executeApiRaw(resource, HttpMethod.GET, undefined, query, apiKey);
+    const anonRes = JSON.parse(resRaw);
 
-    const res = await executeApiRaw(resource, 'GET', undefined, query, apiKey);
+    if (!mapper)
+        mapper = obj => obj;
 
-    return JSON.parse(res) as TResponse;
+    mapper(anonRes);
+
+    return anonRes;
 }
 
-export async function executeApi<TReqeust, TResponse>(resource: string, method: string, request?: TReqeust, query?: QueryString, apiKey?: string): Promise<TResponse> {
+export async function executeApi<TReqeust, TResult>(resource: string, method: HttpMethod, request?: TReqeust, query?: QueryString, mapper?: (obj:TResult) => void, apiKey?: string): Promise<TResult> {
 
     let body:string | undefined = undefined;
 
-    if (request) {
+    if (request) 
         body = JSON.stringify(request);
-    }
 
-    const res = await executeApiRaw(resource, method, body, query, apiKey);
+    const resRaw = await executeApiRaw(resource, method, body, query, apiKey);
+    const anonRes = JSON.parse(resRaw);
 
-    return JSON.parse(res) as TResponse;
+    if (!mapper)
+        mapper = obj => obj;
+
+    mapper(anonRes);
+
+    return anonRes;
 }
 
-export function executeApiRaw(resource: string, method: string, body?: string, query?: QueryString, apiKey?: string): Promise<string> {
+export function executeApiRaw(resource: string, method: HttpMethod, body?: string, query?: QueryString, apiKey?: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         try
         {
@@ -42,7 +55,7 @@ export function executeApiRaw(resource: string, method: string, body?: string, q
             const tokenProvider = tokenProviders.get(key);
 
             if (!tokenProvider)
-                throw new Error("Can not find token provider.  Please call initializeTokenProvider with the appropriate apiKey first.");
+                throw new HttpError("Can not find token provider.  Please call initializeTokenProvider with the appropriate apiKey first.");
         
             tokenProvider.getJwtToken().then(token => {
                 try
@@ -65,20 +78,20 @@ export function executeApiRaw(resource: string, method: string, body?: string, q
                         resource += query.toString(resource.indexOf('?') > -1 ? '' : '?');
 
                     const req = request(resource, requestOptions, res => {
-                        let statusCode = res.statusCode;
-                        //if (res.statusCode < 200 || res.statusCode >= 300)
-                        //    return reject(new Error(``));
                         const body:Uint8Array[] = [];
+                        const statusCode = res.statusCode;
 
                         res.on('data', chunk => body.push(chunk));
                         res.on('end', () => {
                             try{
                                 const str = Buffer.concat(body).toString();
-                                if (!statusCode)
-                                    statusCode = 0;
-    
-                                if (statusCode < 200 || statusCode >= 300)
-                                    reject(new Error(`An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`));
+
+                                if (!statusCode || statusCode < 200 || statusCode >= 300)
+                                    reject(new HttpError(
+                                        `An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`,
+                                        statusCode,
+                                        str
+                                    ));
                                 else
                                     resolve(str);
                             } catch(e) {
@@ -87,10 +100,11 @@ export function executeApiRaw(resource: string, method: string, body?: string, q
                         });
                         res.on('error', () =>{
                             const str = Buffer.concat(body).toString();
-                            if (!statusCode)
-                                statusCode = 0;
-
-                            reject(new Error(`An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`));
+                            reject(new HttpError(
+                                `An error occured calling resource: ${resource} with method ${method} and body ${body}.  statusCode: ${statusCode}. response: ${str}`,
+                                statusCode,
+                                str
+                            ));
                         });
                     });
 
@@ -103,7 +117,9 @@ export function executeApiRaw(resource: string, method: string, body?: string, q
                     })
 
                     req.on('timeout', () => {
-                        reject(new Error(`An timeout occured calling resource: ${resource} with method ${method} and body ${body}.`));
+                        reject(new HttpError(
+                            `An timeout occured calling resource: ${resource} with method ${method} and body ${body}.`
+                        ));
                     })
 
                     req.end();

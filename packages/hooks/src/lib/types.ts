@@ -1,4 +1,4 @@
-import { ApiResponse, QueryString } from "@cossdk/common";
+import { ApiResponse, QueryString, TimeSpan } from "@cossdk/common";
 import { executeGetApi } from "@cossdk/token-provider";
 import { HooksOptions } from "../models/hooks-options";
 import { Type } from "../models/type";
@@ -15,16 +15,21 @@ export class Types extends HooksBase {
     /**
      * Gets a type.
      */
-    get(id: string): Promise<ApiResponse<Type>> {
+    async get(id: string): Promise<ApiResponse<Type>> {
         this.validateInitialization();
 
-        return executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, this.apiKey);
+        const mapper = (obj:ApiResponse<Type>) => {
+            obj.result.created = new Date(obj.result.created);
+            obj.result.defaultRetryDelay = TimeSpan.fromJSON(obj.result.defaultRetryDelay); 
+        };
+
+        return await executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, mapper, this.apiKey);
     }
 
     /**
      * Gets all types.
      */
-    getAll(filter?: TypesFilter): Promise<ApiResponse<Array<Type>>> {
+    async getAll(filter?: TypesFilter): Promise<ApiResponse<Array<Type>>> {
         this.validateInitialization();
 
         const query = new QueryString();
@@ -59,6 +64,13 @@ export class Types extends HooksBase {
             }
         }
 
-        return executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Types`, query, this.apiKey);
+        const mapper = (obj:ApiResponse<Array<Type>>) => {
+            obj.result.forEach(t => {
+                t.created = new Date(t.created);
+                t.defaultRetryDelay = TimeSpan.fromJSON(t.defaultRetryDelay); 
+            });
+        };
+
+        return await executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Types`, query, mapper, this.apiKey);
     }
 }
