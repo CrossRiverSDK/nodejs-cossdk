@@ -1,4 +1,4 @@
-export interface TypesFilter {
+export interface HookEventTypesFilter {
     applicationName?: string;
     name?: string;
     requirePayload?: boolean;

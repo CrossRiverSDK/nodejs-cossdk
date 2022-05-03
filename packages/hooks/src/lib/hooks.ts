@@ -6,11 +6,11 @@ import { Registrations } from "./registrations";
 import { Types } from "./types";
 import { Applications } from "./applications";
 
-export class Hooks  {
+export class Hooks<THookEventType extends string>  {
 
   Applications: Applications;
-  Types: Types;
-  Registrations: Registrations;
+  Types: Types<THookEventType>;
+  Registrations: Registrations<THookEventType>;
   Events: Events;   
 
   constructor(config: HooksConfiguration) {
@@ -24,7 +24,7 @@ export class Hooks  {
 
     this.Applications = new Applications(config);
     this.Types = new Types(config);
-    this.Registrations = new Registrations(config);
+    this.Registrations = new Registrations<THookEventType>(config);
     this.Events = new Events(config);
   }
 }

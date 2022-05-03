@@ -2,6 +2,7 @@ import { CrbCosLending } from "../src";
 import { v4 as uuidv4 } from 'uuid';
 import { CosEnvironment, HttpMethod } from "@cossdk/common";
 import { HookType, WebRegistrationOptions } from "@cossdk/hooks";
+import { LendingHookEventType } from "../src/enums/lending-hook-event-types";
 
 jest.setTimeout(900000);
 
@@ -12,8 +13,8 @@ function initTest()
     {
         testInitialized = true;
         CrbCosLending.initialize({
-            clientId: 'clientId',
-            clientSecret: 'clientSecret',
+            clientId: 'clientid',
+            clientSecret: 'clientsecret',
             environment: CosEnvironment.Sandbox
         });
     }
@@ -43,8 +44,7 @@ describe('hooks', () => {
 
         const registration = await CrbCosLending.Hooks.Registrations.register({
             id: id,
-            applicationName: type.applicationName,
-            hookName: type.name,
+            hookName: LendingHookEventType.AdjustmentActionUpdate,
             options: new WebRegistrationOptions(
                 HttpMethod.PUT,
                 uri

@@ -20,6 +20,10 @@ export abstract class HooksBase {
         return this.options.apiKey;
     }
 
+    protected get defaultApplicationName() {
+        return this.options.defaultApplicationName;
+    }
+
     protected validateInitialization()
     {
         if (stringIsEmpty(this.options.baseUrl))

@@ -14,7 +14,7 @@ export * from './models/registration-options';
 export * from './models/registrations-events-filter';
 export * from './models/registrations-filter';
 export * from './models/resend-events';
-export * from './models/type';
-export * from './models/types-filter';
+export * from './models/hook-event-type';
+export * from './models/hook-event-types-filter';
 export * from './models/upsert-registeration';
 

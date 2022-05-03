@@ -1,9 +1,9 @@
 import { TimeSpan } from "@cossdk/common";
 
-export interface Type
+export interface HookEventType<THookEventType extends string>
 {
     applicationName: string;
-    name: string;
+    name: THookEventType;
     requirePayload: boolean;
     payloadType: string;
     defaultRetryCount: number;

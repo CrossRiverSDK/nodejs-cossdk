@@ -14,24 +14,25 @@ import { ResendEvents } from '../models/resend-events';
 import { UpsertRegistration } from '../models/upsert-registeration';
 import { HooksBase } from './hooks-base';
 
-export class Registrations extends HooksBase {
+export class Registrations<THookEventType extends string> extends HooksBase {
 
     constructor(options: HooksOptions)
     {
         super(options);
     }
 
-    async register(upsertRegistration: UpsertRegistration): Promise<ApiResponse<Registration>> {
+    async register(upsertRegistration: UpsertRegistration<THookEventType>): Promise<ApiResponse<Registration<THookEventType>>> {
         this.validateInitialization();
 
         if (!upsertRegistration.retryCount) upsertRegistration.retryCount = 3;
         if (!upsertRegistration.retryDelay) upsertRegistration.retryDelay = TimeSpan.fromMinutes(5);
+        if (!upsertRegistration.applicationName) upsertRegistration.applicationName = this.defaultApplicationName;
 
-        const mapper = (obj:ApiResponse<Registration>) => {
+        const mapper = (obj:ApiResponse<Registration<THookEventType>>) => {
             this.mapRegistration(obj.result);
         };
 
-        return await executeApi<UpsertRegistration, ApiResponse<Registration>>(
+        return await executeApi<UpsertRegistration<THookEventType>, ApiResponse<Registration<THookEventType>>>(
             `${this.baseUrl}/Hooks/v2/Registrations`,
             HttpMethod.POST,
             upsertRegistration,
@@ -151,7 +152,7 @@ export class Registrations extends HooksBase {
     /**
      * Gets all registrations.
      */
-    async getAll(filter?: RegistrationsFilter): Promise<ApiResponse<PagedResults<Registration>>> {
+    async getAll(filter?: RegistrationsFilter<THookEventType>): Promise<ApiResponse<PagedResults<Registration<THookEventType>>>> {
         this.validateInitialization();
 
         const query = new QueryString();
@@ -211,24 +212,24 @@ export class Registrations extends HooksBase {
             }
         }
 
-        const mapper = (obj:ApiResponse<PagedResults<Registration>>) => {
+        const mapper = (obj:ApiResponse<PagedResults<Registration<THookEventType>>>) => {
             obj.result.results.forEach(r => this.mapRegistration(r));
         };
 
-        return await executeGetApi<ApiResponse<PagedResults<Registration>>>(`${this.baseUrl}/Hooks/v2/Registrations`, query, mapper, this.apiKey);
+        return await executeGetApi<ApiResponse<PagedResults<Registration<THookEventType>>>>(`${this.baseUrl}/Hooks/v2/Registrations`, query, mapper, this.apiKey);
     }
 
     /**
      * Gets a registration.
      */
-    async get(id: string): Promise<ApiResponse<Registration>> {
+    async get(id: string): Promise<ApiResponse<Registration<THookEventType>>> {
         this.validateInitialization();
 
-        const mapper = (obj:ApiResponse<Registration>) => {
+        const mapper = (obj:ApiResponse<Registration<THookEventType>>) => {
             this.mapRegistration(obj.result);
         };
 
-        return await executeGetApi<ApiResponse<Registration>>(`${this.baseUrl}/Hooks/v2/Registrations/${id}`, undefined, mapper, this.apiKey);
+        return await executeGetApi<ApiResponse<Registration<THookEventType>>>(`${this.baseUrl}/Hooks/v2/Registrations/${id}`, undefined, mapper, this.apiKey);
     }
 
     /**
@@ -254,7 +255,7 @@ export class Registrations extends HooksBase {
         }
     }
 
-    private mapRegistration(r: Registration)
+    private mapRegistration(r: Registration<THookEventType>)
     {
         switch(r.options.hookType)
         {

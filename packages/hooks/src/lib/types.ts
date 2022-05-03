@@ -1,11 +1,11 @@
 import { ApiResponse, QueryString, TimeSpan } from "@cossdk/common";
 import { executeGetApi } from "@cossdk/token-provider";
 import { HooksOptions } from "../models/hooks-options";
-import { Type } from "../models/type";
-import { TypesFilter } from "../models/types-filter";
+import { HookEventType } from "../models/hook-event-type";
+import { HookEventTypesFilter } from "../models/hook-event-types-filter";
 import { HooksBase } from "./hooks-base";
 
-export class Types extends HooksBase {
+export class Types<THookEventType extends string> extends HooksBase {
 
     constructor(options: HooksOptions)
     {
@@ -15,21 +15,21 @@ export class Types extends HooksBase {
     /**
      * Gets a type.
      */
-    async get(id: string): Promise<ApiResponse<Type>> {
+    async get(id: string): Promise<ApiResponse<HookEventType<THookEventType>>> {
         this.validateInitialization();
 
-        const mapper = (obj:ApiResponse<Type>) => {
+        const mapper = (obj:ApiResponse<HookEventType<THookEventType>>) => {
             obj.result.created = new Date(obj.result.created);
             obj.result.defaultRetryDelay = TimeSpan.fromJSON(obj.result.defaultRetryDelay); 
         };
 
-        return await executeGetApi<ApiResponse<Type>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, mapper, this.apiKey);
+        return await executeGetApi<ApiResponse<HookEventType<THookEventType>>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, mapper, this.apiKey);
     }
 
     /**
      * Gets all types.
      */
-    async getAll(filter?: TypesFilter): Promise<ApiResponse<Array<Type>>> {
+    async getAll(filter?: HookEventTypesFilter): Promise<ApiResponse<Array<HookEventType<THookEventType>>>> {
         this.validateInitialization();
 
         const query = new QueryString();
@@ -64,13 +64,13 @@ export class Types extends HooksBase {
             }
         }
 
-        const mapper = (obj:ApiResponse<Array<Type>>) => {
+        const mapper = (obj:ApiResponse<Array<HookEventType<THookEventType>>>) => {
             obj.result.forEach(t => {
                 t.created = new Date(t.created);
                 t.defaultRetryDelay = TimeSpan.fromJSON(t.defaultRetryDelay); 
             });
         };
 
-        return await executeGetApi<ApiResponse<Array<Type>>>(`${this.baseUrl}/Hooks/v2/Types`, query, mapper, this.apiKey);
+        return await executeGetApi<ApiResponse<Array<HookEventType<THookEventType>>>>(`${this.baseUrl}/Hooks/v2/Types`, query, mapper, this.apiKey);
     }
 }
