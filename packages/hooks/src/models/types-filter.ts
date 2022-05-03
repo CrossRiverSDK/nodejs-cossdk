@@ -1,4 +1,4 @@
-export class TypesFilter {
+export interface TypesFilter {
     applicationName?: string;
     name?: string;
     requirePayload?: boolean;

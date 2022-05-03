@@ -1,8 +1,7 @@
-import { Hooks } from "../src";
+import { CrbCosLending } from "../src";
 import { v4 as uuidv4 } from 'uuid';
-import { WebRegistrationOptions } from "../src/models/registration-options";
-import { HttpMethod } from "@cossdk/common";
-import { HookType } from "../src/enums/hook-type";
+import { CosEnvironment, HttpMethod } from "@cossdk/common";
+import { HookType, WebRegistrationOptions } from "@cossdk/hooks";
 
 jest.setTimeout(900000);
 
@@ -12,12 +11,10 @@ function initTest()
     if (!testInitialized)
     {
         testInitialized = true;
-        Hooks.initialize({
-            authorityUrl: 'https://oauthtest.crbnj.net',
-            clientId: 'FrameworkTestClient',
-            clientSecret: '75322384a8db4839810b597d5fcfb2a5',
-            baseUrl: 'https://localhost:5001',
-            apiKey: 'test'
+        CrbCosLending.initialize({
+            clientId: 'clientId',
+            clientSecret: 'clientSecret',
+            environment: CosEnvironment.Sandbox
         });
     }
 }
@@ -26,7 +23,7 @@ describe('hooks', () => {
     test('get hooks types', async () => {
         initTest();
 
-        const types = await Hooks.Types.getAll();
+        const types = await CrbCosLending.Hooks.Types.getAll();
 
         expect(types.isSuccessful).toBe(true);
         expect(types.statusCode).toBe(200);
@@ -37,14 +34,14 @@ describe('hooks', () => {
     test('register', async () => {
         initTest();
 
-        const typeResponse = await Hooks.Types.get('crb.hooks.testcontracts.myhook1');
+        const typeResponse = await CrbCosLending.Hooks.Types.get('crb.hooks.testcontracts.myhook1');
         expect(typeResponse.isSuccessful).toBe(true);
 
         const type = typeResponse.result;
         const id = uuidv4();
         const uri = 'http://www.google.com';
 
-        const registration = await Hooks.Registrations.register({
+        const registration = await CrbCosLending.Hooks.Registrations.register({
             id: id,
             applicationName: type.applicationName,
             hookName: type.name,
@@ -69,7 +66,7 @@ describe('hooks', () => {
     test('get registrations', async () => {
         initTest();
 
-        const types = await Hooks.Registrations.getAll();
+        const types = await CrbCosLending.Hooks.Registrations.getAll();
 
         expect(types.isSuccessful).toBe(true);
         expect(types.statusCode).toBe(200);
@@ -80,7 +77,7 @@ describe('hooks', () => {
     test('get registration events', async () => {
         initTest();
 
-        const events = await Hooks.Registrations.events('61CE9286-CCF5-412B-E351-08D9E58DFC29');
+        const events = await CrbCosLending.Hooks.Registrations.events('61CE9286-CCF5-412B-E351-08D9E58DFC29');
 
         expect(events.isSuccessful).toBe(true);
         expect(events.statusCode).toBe(200);
@@ -93,7 +90,7 @@ describe('hooks', () => {
         initTest();
 
         const id = '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase();
-        const event = await Hooks.Registrations.event('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
+        const event = await CrbCosLending.Hooks.Registrations.event('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
 
         expect(event.isSuccessful).toBe(true);
         expect(event.statusCode).toBe(200);
@@ -104,7 +101,7 @@ describe('hooks', () => {
     test('resend registration events', async () => {
         initTest();
 
-        const events = await Hooks.Registrations.resend('61CE9286-CCF5-412B-E351-08D9E58DFC29', {
+        const events = await CrbCosLending.Hooks.Registrations.resend('61CE9286-CCF5-412B-E351-08D9E58DFC29', {
             eventIds: [
                 '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase(),
                 'EDFBB8BE-2A41-4973-96A2-98D12C3C65C0'.toLowerCase()
@@ -121,7 +118,7 @@ describe('hooks', () => {
         initTest();
 
         const id = '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase();
-        const event = await Hooks.Registrations.eventDetails('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
+        const event = await CrbCosLending.Hooks.Registrations.eventDetails('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
 
         expect(event.isSuccessful).toBe(true);
         expect(event.statusCode).toBe(200);
@@ -134,7 +131,7 @@ describe('hooks', () => {
 
         const id = '65D89AED-F2D8-42E7-95E4-05D18D6F217F'.toLowerCase();
 
-        const reg = await Hooks.Registrations.get(id);
+        const reg = await CrbCosLending.Hooks.Registrations.get(id);
 
         expect(reg.isSuccessful).toBe(true);
         expect(reg.statusCode).toBe(200);
@@ -147,7 +144,7 @@ describe('hooks', () => {
 
         const id = '65D89AED-F2D8-42E7-95E4-05D18D6F217F'.toLowerCase();
 
-        const res = await Hooks.Registrations.delete(id);
+        const res = await CrbCosLending.Hooks.Registrations.delete(id);
 
         expect(res).toBe(true);
     });
@@ -160,7 +157,7 @@ describe('hooks', () => {
             '69BB576D-4591-465D-AB30-26F5E5E2F7EF'.toLowerCase()
         ];
 
-        const res = await Hooks.Registrations.unsuspend(ids);
+        const res = await CrbCosLending.Hooks.Registrations.unsuspend(ids);
 
         expect(res).toBe(true);
     });

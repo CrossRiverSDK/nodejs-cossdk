@@ -2,7 +2,7 @@ import { HttpMethod } from "@cossdk/common";
 import { AuthenticationType } from "../enums/authentication-type";
 import { HookType } from "../enums/hook-type";
 
-export interface RegistrationsEventDetailsFilter
+export interface EventDetailsFilter
 {
     hookCorrelationId?: string;
     extendedCorrelations?: string;

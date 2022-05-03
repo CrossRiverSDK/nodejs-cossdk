@@ -1,10 +1,4 @@
-export class Application {
-    constructor()
-    {
-        this.name = '';
-        this.created = new Date();
-    }
-
+export interface Application {
     name: string;
     created: Date;
 }

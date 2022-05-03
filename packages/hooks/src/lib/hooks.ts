@@ -8,12 +8,12 @@ import { Applications } from "./applications";
 
 export class Hooks  {
 
-  static Applications: Applications;
-  static Types: Types;
-  static Registrations: Registrations;
-  static Events: Events;   
+  Applications: Applications;
+  Types: Types;
+  Registrations: Registrations;
+  Events: Events;   
 
-  static initialize(config: HooksConfiguration) {
+  constructor(config: HooksConfiguration) {
     if (stringIsNullOrEmpty(config.apiKey))
       throw new Error('You must supply an api key.');
 
@@ -22,10 +22,10 @@ export class Hooks  {
 
     initializeTokenProvider(config, config.apiKey);
 
-    Hooks.Applications = new Applications(config);
-    Hooks.Types = new Types(config);
-    Hooks.Registrations = new Registrations(config);
-    Hooks.Events = new Events(config);
+    this.Applications = new Applications(config);
+    this.Types = new Types(config);
+    this.Registrations = new Registrations(config);
+    this.Events = new Events(config);
   }
 }
 

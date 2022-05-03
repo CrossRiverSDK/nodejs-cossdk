@@ -7,7 +7,7 @@ import { HookEventDetails } from '../models/hook-event-details';
 import { HooksOptions } from '../models/hooks-options';
 import { Registration } from '../models/registration';
 import { BasicAuthenticationOptions, EmailRegistrationOptions, NoAuthenticationOptions, OidcAuthenticationOptions, RabbitMqRegistrationOptions, SlackRegistrationOptions, SqsRegistrationOptions, WebRegistrationOptions } from '../models/registration-options';
-import { RegistrationsEventDetailsFilter } from '../models/registrations-event-details-filter';
+import { EventDetailsFilter } from '../models/event-details-filter';
 import { RegistrationsEventsFilter } from '../models/registrations-events-filter';
 import { RegistrationsFilter } from "../models/registrations-filter";
 import { ResendEvents } from '../models/resend-events';
@@ -40,25 +40,6 @@ export class Registrations extends HooksBase {
             this.apiKey);
     }
 
-     /**
-     * resend events.
-     */
-    async resend(registrationId: string, events: ResendEvents): Promise<ApiResponse<Array<HookEvent>>> {
-        this.validateInitialization();
-
-        const mapper = (obj:ApiResponse<Array<HookEvent>>) => {
-            obj.result.forEach(e => this.mapEvent(e));
-        };
-
-        return await executeApi<ResendEvents, ApiResponse<Array<HookEvent>>>(
-            `${this.baseUrl}/Hooks/v2/Registrations/${registrationId}/Events/Resend`,
-            HttpMethod.POST,
-            events,
-            undefined,
-            mapper, 
-            this.apiKey);
-    }
-
     /**
      * Unsuspend registrations.
      */
@@ -81,7 +62,6 @@ export class Registrations extends HooksBase {
         }
     }
 
-    
     /**
      * Gets all registration events.
      */
@@ -91,47 +71,7 @@ export class Registrations extends HooksBase {
         const query = new QueryString();
 
         if (filter)
-        {
-            if (filter.id) {
-                query.set('Id', filter.id);
-            }
-
-            if (filter.payload) {
-                query.set('Payload', filter.payload);
-            }
-
-            if (filter.sent) {
-                query.set('Sent', filter.sent);
-            }
-
-            if (filter.fromCreated) {
-                query.set('FromCreated', filter.fromCreated);
-            }
-
-            if (filter.toCreated) {
-                query.set('ToCreated', filter.toCreated);
-            }
-
-            if (filter.sortPropertyName) {
-                query.set('SortPropertyName', filter.sortPropertyName);
-            }
-
-            if (filter.defaultSortingPropertyName) {
-                query.set('DefaultSortingPropertyName', filter.defaultSortingPropertyName);
-            }
-
-            if (filter.sortDirection) {
-                query.set('SortDirection', filter.sortDirection);
-            }
-
-            if (filter.pageNumber) {
-                query.set('PageNumber', filter.pageNumber);
-            }
-
-            if (filter.pageSize) {
-                query.set('PageSize', filter.pageSize);
-            }
-        }
+            this.setRegistrationsEventDetailsFilterQueryString(filter, query);
 
         const mapper = (obj:ApiResponse<PagedResults<HookEvent>>) => {
             obj.result.results.forEach(e => this.mapEvent(e));
@@ -166,89 +106,13 @@ export class Registrations extends HooksBase {
     /**
      * Gets all registration event details.
      */
-     async eventDetails(registrationId: string, eventId: string, filter?: RegistrationsEventDetailsFilter): Promise<ApiResponse<Array<HookEventDetails>>> {
+     async eventDetails(registrationId: string, eventId: string, filter?: EventDetailsFilter): Promise<ApiResponse<Array<HookEventDetails>>> {
         this.validateInitialization();        
 
         const query = new QueryString();
 
         if (filter)
-        {
-            if (filter.hookCorrelationId) {
-                query.set('HookCorrelationId', filter.hookCorrelationId);
-            }
-
-            if (filter.extendedCorrelations) {
-                query.set('ExtendedCorrelations', filter.extendedCorrelations);
-            }
-
-            if (filter.hookType) {
-                query.set('HookType', filter.hookType);
-            }
-
-            if (filter.messageType) {
-                query.set('MessageType', filter.messageType);
-            }
-
-            if (filter.httpMethod) {
-                query.set('HttpMethod', filter.httpMethod);
-            }
-
-            if (filter.uri) {
-                query.set('Uri', filter.uri);
-            }
-
-            if (filter.authenticationType) {
-                query.set('AuthenticationType', filter.authenticationType);
-            }
-
-            if (filter.authenticationOptions) {
-                query.set('AuthenticationOptions', filter.authenticationOptions);
-            }
-
-            if (filter.requestHeaders) {
-                query.set('RequestHeaders', filter.requestHeaders);
-            }
-
-            if (filter.requestPayload) {
-                query.set('RequestPayload', filter.requestPayload);
-            }
-
-            if (filter.responseHeaders) {
-                query.set('ResponseHeaders', filter.responseHeaders);
-            }
-
-            if (filter.responsePayload) {
-                query.set('ResponsePayload', filter.responsePayload);
-            }
-
-            if (filter.responseCode) {
-                query.set('ResponseCode', filter.responseCode);
-            }
-
-            if (filter.clientException) {
-                query.set('ClientException', filter.clientException);
-            }
-
-            if (filter.fromTimeSent) {
-                query.set('FromTimeSent', filter.fromTimeSent);
-            }
-
-            if (filter.toTimeSent) {
-                query.set('ToTimeSent', filter.toTimeSent);
-            }
-
-            if (filter.requestedBy) {
-                query.set('RequestedBy', filter.requestedBy);
-            }
-
-            if (filter.fromRequestedAt) {
-                query.set('FromRequestedAt', filter.fromRequestedAt);
-            }
-
-            if (filter.toRequestedAt) {
-                query.set('ToRequestedAt', filter.toRequestedAt);
-            }
-        }
+            this.setEventDetailsFilterQueryString(filter, query);
 
         const mapper = (obj:ApiResponse<Array<HookEventDetails>>) => {
             obj.result.forEach(ed => {
@@ -258,10 +122,30 @@ export class Registrations extends HooksBase {
 
         return await executeGetApi<ApiResponse<Array<HookEventDetails>>>(
             `${this.baseUrl}/Hooks/v2/Registrations/${registrationId}/Events/${eventId}/Details`, 
-            undefined,
+            query,
             mapper,
             this.apiKey
         );
+    }
+
+    
+     /**
+     * resend events.
+     */
+    async resend(registrationId: string, events: ResendEvents): Promise<ApiResponse<Array<HookEvent>>> {
+        this.validateInitialization();
+
+        const mapper = (obj:ApiResponse<Array<HookEvent>>) => {
+            obj.result.forEach(e => this.mapEvent(e));
+        };
+
+        return await executeApi<ResendEvents, ApiResponse<Array<HookEvent>>>(
+            `${this.baseUrl}/Hooks/v2/Registrations/${registrationId}/Events/Resend`,
+            HttpMethod.POST,
+            events,
+            undefined,
+            mapper, 
+            this.apiKey);
     }
 
     /**
@@ -368,20 +252,6 @@ export class Registrations extends HooksBase {
         {
             return false;
         }
-    }
-
-
-    private mapEventDetails(ed: HookEventDetails)
-    {
-        ed.timeSent = new Date(ed.timeSent);
-        ed.created = new Date(ed.created);
-        if (ed.requestedAt)
-            ed.requestedAt = new Date(ed.requestedAt);
-    }
-
-    private mapEvent(e: HookEvent)
-    {
-        e.created = new Date(e.created);
     }
 
     private mapRegistration(r: Registration)
