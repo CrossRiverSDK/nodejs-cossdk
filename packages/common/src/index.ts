@@ -4,6 +4,8 @@ export * from './errors/http-error';
 export * from './helpers/query-string';
 export * from './helpers/string-helper';
 export * from './models/api-response';
+export * from './models/paged-request';
 export * from './models/paged-results';
 export * from './models/time-span';
 export * from './enums/http-method';
+export * from './enums/sort-direction';

@@ -13,10 +13,10 @@ function initTest()
     {
         testInitialized = true;
         Hooks.initialize({
-            authorityUrl: 'authorityUrl',
-            clientId: 'clientId',
-            clientSecret: 'secret',
-            baseUrl: 'apiUrl',
+            authorityUrl: 'https://oauthtest.crbnj.net',
+            clientId: 'FrameworkTestClient',
+            clientSecret: '75322384a8db4839810b597d5fcfb2a5',
+            baseUrl: 'https://localhost:5001',
             apiKey: 'test'
         });
     }
@@ -77,6 +77,58 @@ describe('hooks', () => {
         expect(types.errors).toBeUndefined();
     });
 
+    test('get registration events', async () => {
+        initTest();
+
+        const events = await Hooks.Registrations.events('61CE9286-CCF5-412B-E351-08D9E58DFC29');
+
+        expect(events.isSuccessful).toBe(true);
+        expect(events.statusCode).toBe(200);
+        expect(events.result.results.length).toBe(2);
+        expect(events.errors).toBeUndefined();
+    });
+
+
+    test('get registration event', async () => {
+        initTest();
+
+        const id = '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase();
+        const event = await Hooks.Registrations.event('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
+
+        expect(event.isSuccessful).toBe(true);
+        expect(event.statusCode).toBe(200);
+        expect(event.result.id).toBe(id);
+        expect(event.errors).toBeUndefined();
+    });
+
+    test('resend registration events', async () => {
+        initTest();
+
+        const events = await Hooks.Registrations.resend('61CE9286-CCF5-412B-E351-08D9E58DFC29', {
+            eventIds: [
+                '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase(),
+                'EDFBB8BE-2A41-4973-96A2-98D12C3C65C0'.toLowerCase()
+            ]
+        });
+
+        expect(events.isSuccessful).toBe(true);
+        expect(events.statusCode).toBe(200);
+        expect(events.result.length).toBe(2);
+        expect(events.errors).toBeUndefined();
+    });
+
+    test('get registration event details', async () => {
+        initTest();
+
+        const id = '89696DE4-5AEE-4DDC-8ED4-2DF6AC45CB97'.toLowerCase();
+        const event = await Hooks.Registrations.eventDetails('61CE9286-CCF5-412B-E351-08D9E58DFC29', id);
+
+        expect(event.isSuccessful).toBe(true);
+        expect(event.statusCode).toBe(200);
+        expect(event.result.length).toBe(0);
+        expect(event.errors).toBeUndefined();
+    });
+    
     test('get registration', async () => {
         initTest();
 

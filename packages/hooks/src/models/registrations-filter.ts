@@ -1,7 +1,7 @@
 import { HookType } from "../enums/hook-type";
-import { SortDirection } from "../enums/sort-direction";
+import { PagedRequest } from "@cossdk/common";
 
-export class RegistrationsFilter {
+export interface RegistrationsFilter extends PagedRequest {
     applicationName?: string;
     hookName?: string;
     hookServiceId?: string;
@@ -10,9 +10,4 @@ export class RegistrationsFilter {
     suspended?: boolean;
     fromCreated?: Date;
     toCreated?: Date;
-    sortPropertyName?: string;
-    defaultSortingPropertyName?: string;
-    sortDirection?: SortDirection;
-    pageNumber?: number;
-    pageSize?: number;
 }
