@@ -8,7 +8,6 @@ export * from './models/events-filter';
 export * from './models/hook-event';
 export * from './models/hook-event-details';
 export * from './models/hooks-configuration';
-export * from './models/hooks-options';
 export * from './models/registration';
 export * from './models/registration-options';
 export * from './models/registrations-events-filter';

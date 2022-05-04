@@ -1,13 +1,13 @@
 import { ApiResponse, QueryString, TimeSpan } from "@cossdk/common";
 import { executeGetApi } from "@cossdk/token-provider";
-import { HooksOptions } from "../models/hooks-options";
 import { HookEventType } from "../models/hook-event-type";
 import { HookEventTypesFilter } from "../models/hook-event-types-filter";
 import { HooksBase } from "./hooks-base";
+import { HooksConfiguration } from "../models/hooks-configuration";
 
 export class Types<THookEventType extends string> extends HooksBase {
 
-    constructor(options: HooksOptions)
+    constructor(options: HooksConfiguration)
     {
         super(options);
     }
@@ -15,7 +15,7 @@ export class Types<THookEventType extends string> extends HooksBase {
     /**
      * Gets a type.
      */
-    async get(id: string): Promise<ApiResponse<HookEventType<THookEventType>>> {
+    async get(name: THookEventType): Promise<ApiResponse<HookEventType<THookEventType>>> {
         this.validateInitialization();
 
         const mapper = (obj:ApiResponse<HookEventType<THookEventType>>) => {
@@ -23,13 +23,15 @@ export class Types<THookEventType extends string> extends HooksBase {
             obj.result.defaultRetryDelay = TimeSpan.fromJSON(obj.result.defaultRetryDelay); 
         };
 
+        const id = `${this.defaultApplicationName}.${name}`;
+
         return await executeGetApi<ApiResponse<HookEventType<THookEventType>>>(`${this.baseUrl}/Hooks/v2/Types/${id}`, undefined, mapper, this.apiKey);
     }
 
     /**
      * Gets all types.
      */
-    async getAll(filter?: HookEventTypesFilter): Promise<ApiResponse<Array<HookEventType<THookEventType>>>> {
+    async getAll(filter?: HookEventTypesFilter<THookEventType>): Promise<ApiResponse<Array<HookEventType<THookEventType>>>> {
         this.validateInitialization();
 
         const query = new QueryString();

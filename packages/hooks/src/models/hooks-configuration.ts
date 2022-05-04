@@ -1,6 +1,6 @@
-import { TokenProviderConfiguration } from '@cossdk/token-provider';
-import { HooksOptions } from './hooks-options';
+import { ApiConfiguration } from "@cossdk/common";
 
-export interface HooksConfiguration extends HooksOptions, TokenProviderConfiguration
+export interface HooksConfiguration extends ApiConfiguration
 {
+    defaultApplicationName:string;
 }

@@ -2,12 +2,12 @@ import { ApiResponse, QueryString } from "@cossdk/common";
 import { executeGetApi } from "@cossdk/token-provider";
 import { Application } from "../models/application";
 import { ApplicationsFilter } from "../models/applications-filter";
-import { HooksOptions } from "../models/hooks-options";
+import { HooksConfiguration } from "../models/hooks-configuration";
 import { HooksBase } from "./hooks-base";
 
 export class Applications extends HooksBase {
 
-    constructor(options: HooksOptions)
+    constructor(options: HooksConfiguration)
     {
         super(options);
     }

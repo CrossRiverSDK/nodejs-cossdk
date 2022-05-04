@@ -8,13 +8,16 @@ import { request, RequestOptions } from "https";
 
 const tokenProviders = new Map<string, TokenProvider>();
 
-export function initializeTokenProvider(config: TokenProviderConfiguration, apiKey?: string) {
-    const key = apiKey ?? '';
+export function isTokenProviderInitialized(apiKey: string): boolean
+{
+    return tokenProviders.has(apiKey);
+}
 
-    if (tokenProviders.has(key))
+export function initializeTokenProvider(config: TokenProviderConfiguration) {
+    if (tokenProviders.has(config.apiKey))
         throw new Error("You can not initialize the same token provider twice");
 
-    tokenProviders.set(key, new TokenProvider(config));
+    tokenProviders.set(config.apiKey, new TokenProvider(config));
 }
 
 export async function executeGetApi<TResult>(resource: string, query?: QueryString, mapper?: (obj:TResult) => void, apiKey?: string): Promise<TResult> {

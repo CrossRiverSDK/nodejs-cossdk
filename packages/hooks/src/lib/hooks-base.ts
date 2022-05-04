@@ -2,12 +2,12 @@ import { QueryString, stringIsEmpty } from "@cossdk/common";
 import { EventDetailsFilter } from "../models/event-details-filter";
 import { HookEvent } from "../models/hook-event";
 import { HookEventDetails } from "../models/hook-event-details";
-import { HooksOptions } from "../models/hooks-options";
+import { HooksConfiguration } from "../models/hooks-configuration";
 import { RegistrationsEventsFilter } from "../models/registrations-events-filter";
 
 export abstract class HooksBase {
 
-    constructor(private options: HooksOptions)
+    constructor(private options: HooksConfiguration)
     {
 
     }

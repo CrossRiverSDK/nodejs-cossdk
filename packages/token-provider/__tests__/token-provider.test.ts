@@ -6,6 +6,7 @@ import { TokenProvider } from "../src/lib/token-provider";
 describe('token-provider', () => {
     test('get token and cache it', async () => {
         const tokenProvider = new TokenProvider({
+            apiKey: 'test',
             authorityUrl: 'https://oauthtest.crbnj.net',
             clientId: 'myTestClient',
             clientSecret: 'myTestPassword'
@@ -20,6 +21,7 @@ describe('token-provider', () => {
 
     test('call api successfully', async () => {
         await initializeTokenProvider({
+            apiKey: 'test',
             authorityUrl: 'https://oauthtest.crbnj.net',
             clientId: 'myTestClient',
             clientSecret: 'myTestPassword'
@@ -32,6 +34,7 @@ describe('token-provider', () => {
 
     test('throw exceptions when config is messed up', async () => {
         const config:TokenProviderConfiguration = {
+            apiKey: 'test',
             authorityUrl: ''
         }
 

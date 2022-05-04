@@ -1,6 +1,6 @@
-export interface HookEventTypesFilter {
+export interface HookEventTypesFilter<THookEventType extends string> {
     applicationName?: string;
-    name?: string;
+    name?: THookEventType;
     requirePayload?: boolean;
     fromDefaultRetryCount?: number;
     toDefaultRetryCount?: number;

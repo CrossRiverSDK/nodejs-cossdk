@@ -4,7 +4,6 @@ import { AuthenticationType } from '../enums/authentication-type';
 import { HookType } from '../enums/hook-type';
 import { HookEvent } from '../models/hook-event';
 import { HookEventDetails } from '../models/hook-event-details';
-import { HooksOptions } from '../models/hooks-options';
 import { Registration } from '../models/registration';
 import { BasicAuthenticationOptions, EmailRegistrationOptions, NoAuthenticationOptions, OidcAuthenticationOptions, RabbitMqRegistrationOptions, SlackRegistrationOptions, SqsRegistrationOptions, WebRegistrationOptions } from '../models/registration-options';
 import { EventDetailsFilter } from '../models/event-details-filter';
@@ -13,10 +12,11 @@ import { RegistrationsFilter } from "../models/registrations-filter";
 import { ResendEvents } from '../models/resend-events';
 import { UpsertRegistration } from '../models/upsert-registeration';
 import { HooksBase } from './hooks-base';
+import { HooksConfiguration } from '../models/hooks-configuration';
 
 export class Registrations<THookEventType extends string> extends HooksBase {
 
-    constructor(options: HooksOptions)
+    constructor(options: HooksConfiguration)
     {
         super(options);
     }

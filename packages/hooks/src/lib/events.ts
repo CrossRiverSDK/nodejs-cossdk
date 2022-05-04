@@ -4,13 +4,13 @@ import { EventDetailsFilter } from "../models/event-details-filter";
 import { EventsFilter } from "../models/events-filter";
 import { HookEvent } from "../models/hook-event";
 import { HookEventDetails } from "../models/hook-event-details";
-import { HooksOptions } from "../models/hooks-options";
+import { HooksConfiguration } from "../models/hooks-configuration";
 import { ResendEvents } from "../models/resend-events";
 import { HooksBase } from "./hooks-base";
 
 export class Events extends HooksBase {
 
-    constructor(options: HooksOptions)
+    constructor(options: HooksConfiguration)
     {
         super(options);
     }

@@ -9,6 +9,7 @@ export * from './models/paged-request';
 export * from './models/paged-results';
 export * from './models/time-span';
 export * from './models/initialization-configuration';
+export * from './models/api-configuration';
 export * from './enums/http-method';
 export * from './enums/sort-direction';
 export * from './enums/cos-environment';
