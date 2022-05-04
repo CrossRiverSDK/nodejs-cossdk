@@ -13,8 +13,8 @@ function initTest()
     {
         testInitialized = true;
         CrbCosLending.initialize({
-            clientId: 'clientid',
-            clientSecret: 'clientsecret',
+            clientId: 'testClientId',
+            clientSecret: 'testClientSecret',
             environment: CosEnvironment.Sandbox
         });
     }
@@ -35,7 +35,7 @@ describe('hooks', () => {
     test('register', async () => {
         initTest();
 
-        const typeResponse = await CrbCosLending.Hooks.Types.get('crb.hooks.testcontracts.myhook1');
+        const typeResponse = await CrbCosLending.Hooks.Types.get(LendingHookEventType.AdjustmentActionUpdate);
         expect(typeResponse.isSuccessful).toBe(true);
 
         const type = typeResponse.result;
@@ -44,7 +44,7 @@ describe('hooks', () => {
 
         const registration = await CrbCosLending.Hooks.Registrations.register({
             id: id,
-            hookName: LendingHookEventType.AdjustmentActionUpdate,
+            hookName: type.name,
             options: new WebRegistrationOptions(
                 HttpMethod.PUT,
                 uri
