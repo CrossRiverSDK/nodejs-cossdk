@@ -1,4 +1,4 @@
-import { Address } from "./Address";
+import { Address } from "./address";
 
 export interface Merchant {
     merchantId?: string | null;

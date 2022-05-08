@@ -1,0 +1,40 @@
+import { Borrower } from "./borrower";
+import { Business } from "./business";
+import { CoBorrower } from "./co-borrower";
+import { Credit } from "./credit";
+import { Employer } from "./employer";
+import { Funding } from "./funding";
+import { Investor } from "./investor";
+import { IssuingBankId } from "./issuing-bank-id";
+import { Merchant } from "./merchant";
+import { OFAC } from "./ofac";
+import { Sell } from "./sell";
+import { Servicer } from "./servicer";
+import { Submitter } from "./submitter";
+import { TILA } from "./tila";
+
+export interface PreApprovalLoanRequest {
+    applicationId: string;
+    loanNumber?: string | null;
+    issuingBankId: IssuingBankId;
+    platform: string;
+    loanAmount?: number;
+    noteDate?: Date;
+    approvedLoanAmount?: number;
+    applicationDate: Date;
+    servicer?: Servicer;
+    program: string;
+    tila?: TILA;
+    borrowers: Array<Borrower>;
+    coBorrowers?: Array<CoBorrower> | null;
+    creditObject?: Credit;
+    employers?: Array<Employer> | null;
+    merchant?: Merchant;
+    sell?: Sell;
+    business?: Business;
+    submitter: Submitter;
+    funding?: Funding;
+    investor?: Investor;
+    ofac?: OFAC;
+    loanPurpose?: string | null;
+}

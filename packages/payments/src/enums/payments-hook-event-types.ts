@@ -4,9 +4,12 @@
  * @enum {string}
  */
  export enum PaymentsHookEventType {
-    AdjustmentActionUpdate = "adjustmentactionupdate",
-    ComplianceLoanFailed = "complianceloanfailed",
-    FundingAttemptComplete = "fundingattemptcomplete",
-    LoanStatusUpdated = "loanstatusupdated",
-    RailUpdated = "railupdated"
+    AccountCreditReceived = "accountcreditreceived",
+    Authorization = "authorization",
+    CardStatusChanged = "cardstatuschanged",
+    OnboardingApproved = "onboardingapproved",
+    OnboardingNotification = "onboardingnotification",
+    Transaction = "transaction",
+    TransactionBatchCompleted = "transactionbatchcompleted",
+    TransactionStatusChanged = "transactionstatuschanged"
 }

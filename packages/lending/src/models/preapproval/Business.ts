@@ -1,9 +1,9 @@
-import { Address } from "./Address";
-import { AuthorisedSignatory } from "./AuthorisedSignatory";
-import { BusinessOwner } from "./BusinessOwner";
+import { Address } from "./address";
+import { AuthorisedSignatory } from "./authorised-signatory";
+import { BusinessOwner } from "./business-owner";
 import { BusinessType } from "./BusinessType";
-import { CIP } from "./CIP";
-import { TaxNumber } from "./TaxNumber";
+import { CIP } from "./cip";
+import { TaxNumber } from "./tax-number";
 
 export interface Business {
     taxNumber: TaxNumber;

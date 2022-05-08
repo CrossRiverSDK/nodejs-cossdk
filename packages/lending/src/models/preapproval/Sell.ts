@@ -1,5 +1,5 @@
-import { Investor } from "./Investor";
-import { LoanType } from "./LoanType";
+import { Investor } from "./investor";
+import { LoanType } from "./loan-type";
 
 export interface Sell {
     loanType: LoanType;

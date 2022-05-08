@@ -1,14 +1,14 @@
 import { ApiConfiguration, ApiResponse, HttpMethod } from "@cossdk/common";
 import { executeApi, executeGetApi } from "@cossdk/token-provider";
-import { ApplicationApprovedRequest } from "../models/preapproval/ApplicationApprovedRequest";
-import { ApplicationApprovedResponse, mapApplicationApprovedResponse } from "../models/preapproval/ApplicationApprovedResponse";
-import { ApplicationDeniedRequest } from "../models/preapproval/ApplicationDeniedRequest";
-import { ApprovePreApprovalLoanRequest } from "../models/preapproval/ApprovePreApprovalLoanRequest";
-import { DenyPreApprovalLoanRequest } from "../models/preapproval/DenyPreApprovalLoanRequest";
-import { mapPreApprovalDenyResponse, PreApprovalDenyResponse } from "../models/preapproval/PreApprovalDenyResponse";
-import { mapPreApprovalLoanDenyResponse, PreApprovalLoanDenyResponse } from "../models/preapproval/PreApprovalLoanDenyResponse";
-import { PreApprovalLoanRequest } from "../models/preapproval/PreApprovalLoanRequest";
-import { mapPreApprovalLoanResponse, PreApprovalLoanResponse } from "../models/preapproval/PreApprovalLoanResponse";
+import { ApplicationApprovedRequest } from "../models/preapproval/application-approved-request";
+import { ApplicationApprovedResponse, mapApplicationApprovedResponse } from "../models/preapproval/application-approved-response";
+import { ApplicationDeniedRequest } from "../models/preapproval/application-denied-request";
+import { ApprovePreApprovalLoanRequest } from "../models/preapproval/approve-pre-approval-loan-request";
+import { DenyPreApprovalLoanRequest } from "../models/preapproval/deny-pre-approval-loan-request";
+import { mapPreApprovalDenyResponse, PreApprovalDenyResponse } from "../models/preapproval/pre-approval-deny-response";
+import { mapPreApprovalLoanDenyResponse, PreApprovalLoanDenyResponse } from "../models/preapproval/pre-approval-loan-deny-response";
+import { PreApprovalLoanRequest } from "../models/preapproval/pre-approval-loan-request";
+import { mapPreApprovalLoanResponse, PreApprovalLoanResponse } from "../models/preapproval/pre-approval-loan-response";
 import { LendingBase } from "./lending-base";
 
 export class PreApproval extends LendingBase {

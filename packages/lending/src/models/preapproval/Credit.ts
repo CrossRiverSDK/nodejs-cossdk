@@ -1,8 +1,8 @@
-import { AssetClassType } from "./AssetClassType";
-import { CreditBureauScore, mapCreditBureauScore } from "./CreditBureauScore";
-import { CreditCustomField } from "./CreditCustomField";
-import { CreditReport } from "./CreditReport";
-import { Employer } from "./Employer";
+import { AssetClassType } from "./asset-class-type";
+import { CreditBureauScore, mapCreditBureauScore } from "./credit-bureau-score";
+import { CreditCustomField } from "./credit-custom-field";
+import { CreditReport } from "./credit-report";
+import { Employer } from "./employer";
 
 export interface Credit {
     priorLoanFlag: boolean;

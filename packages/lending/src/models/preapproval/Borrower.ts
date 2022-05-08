@@ -1,6 +1,6 @@
-import { Address } from "./Address";
-import { CIP } from "./CIP";
-import { ResidencyType } from "./ResidencyType";
+import { Address } from "./address";
+import { CIP } from "./cip";
+import { ResidencyType } from "./residency-type";
 
 export interface Borrower {
     cip: CIP;

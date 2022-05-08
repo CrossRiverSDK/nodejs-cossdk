@@ -1,7 +1,7 @@
-import { CIPDecisionType } from "./CIPDecisionType";
-import { CIPDocument } from "./CIPDocument";
-import { CIPVendor } from "./CIPVendor";
-import { CIPVerification } from "./CIPVerification";
+import { CIPDecisionType } from "./cip-decision-type";
+import { CIPDocument } from "./cip-document";
+import { CIPVendor } from "./cip-vendor";
+import { CIPVerification } from "./cip-verification";
 
 export interface CIP {
     decision?: CIPDecisionType;

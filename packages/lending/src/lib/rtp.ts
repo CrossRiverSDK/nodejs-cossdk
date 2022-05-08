@@ -1,6 +1,6 @@
 import { ApiConfiguration, ApiResponse, HttpMethod } from "@cossdk/common";
 import { executeApi } from "@cossdk/token-provider";
-import { BankAccount } from "../models/rtp/BankAccount";
+import { BankAccount } from "../models/rtp/bank-account";
 import { LendingBase } from "./lending-base";
 
 export class Rtp extends LendingBase {

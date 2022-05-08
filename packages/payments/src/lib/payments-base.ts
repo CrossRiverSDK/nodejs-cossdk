@@ -9,7 +9,7 @@ export abstract class PaymentsBase {
         throw new Error('You must supply an api key.');
   
       if (!isTokenProviderInitialized(options.apiKey))
-        throw new Error('You must call initializeTokenProvider(config) before instantiating Hooks.');
+        throw new Error('You must call initializeTokenProvider(config) before instantiating.');
   
       if (stringIsNullOrEmpty(options.baseUrl))
         throw new Error('You must supply a base url.');

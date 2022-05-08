@@ -6,6 +6,7 @@ export * from './helpers/string-helper';
 export * from './helpers/authority-helper';
 export * from './models/api-response';
 export * from './models/paged-request';
+export * from './models/paged-request-thin';
 export * from './models/paged-results';
 export * from './models/time-span';
 export * from './models/initialization-configuration';

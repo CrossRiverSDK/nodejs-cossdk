@@ -1,4 +1,4 @@
-import { Rail } from "./Rail";
+import { Rail } from "./rail";
 
 export interface Funding {
     netFunding?: number;

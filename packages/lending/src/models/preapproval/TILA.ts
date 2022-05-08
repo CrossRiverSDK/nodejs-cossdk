@@ -1,6 +1,6 @@
-import { InterestAccrualMethod } from "./InterestAccrualMethod";
-import { PaymentFrequencyType } from "./PaymentFrequencyType";
-import { RateType } from "./RateType";
+import { InterestAccrualMethod } from "./interest-accrual-method";
+import { PaymentFrequencyType } from "./payment-frequency-type";
+import { RateType } from "./rate-type";
 
 export interface TILA {
     amortization: number;
