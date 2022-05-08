@@ -1,17 +1,17 @@
-import { ApiConfiguration, stringIsEmpty, stringIsNullOrEmpty } from "@cossdk/common";
+import { ApiConfiguration } from "@cossdk/common";
 import { isTokenProviderInitialized } from "@cossdk/token-provider";
 
 export abstract class PaymentsBase {
 
     constructor(private options: ApiConfiguration)
     {
-      if (stringIsNullOrEmpty(options.apiKey))
+      if (!options.apiKey)
         throw new Error('You must supply an api key.');
   
       if (!isTokenProviderInitialized(options.apiKey))
         throw new Error('You must call initializeTokenProvider(config) before instantiating.');
   
-      if (stringIsNullOrEmpty(options.baseUrl))
+      if (!options.baseUrl)
         throw new Error('You must supply a base url.');
     }
 
@@ -25,7 +25,7 @@ export abstract class PaymentsBase {
 
     protected validateInitialization()
     {
-        if (stringIsEmpty(this.options.baseUrl))
+        if (!this.options.baseUrl)
             throw new Error('You must initialize the payments sdk by calling CrbCosPayments.initialize().');
     }
 }

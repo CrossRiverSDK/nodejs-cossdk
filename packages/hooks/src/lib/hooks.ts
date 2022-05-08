@@ -1,4 +1,4 @@
-import { stringIsNullOrEmpty } from "@cossdk/common";
+import { } from "@cossdk/common";
 import { initializeTokenProvider, isTokenProviderInitialized } from "@cossdk/token-provider";
 import { HooksConfiguration } from "../models/hooks-configuration";
 import { Events } from "./events";
@@ -14,13 +14,13 @@ export class Hooks<THookEventType extends string>  {
   Events: Events;   
 
   constructor(config: HooksConfiguration) {
-    if (stringIsNullOrEmpty(config.apiKey))
+    if (!config.apiKey)
       throw new Error('You must supply an api key.');
 
     if (!isTokenProviderInitialized(config.apiKey))
       throw new Error('You must call initializeTokenProvider(config) before instantiating Hooks.');
 
-    if (stringIsNullOrEmpty(config.baseUrl))
+    if (!config.baseUrl)
       throw new Error('You must supply a base url.');
 
     this.Applications = new Applications(config);

@@ -1,4 +1,4 @@
-import { QueryString, stringIsEmpty } from "@cossdk/common";
+import { QueryString } from "@cossdk/common";
 import { EventDetailsFilter } from "../models/event-details-filter";
 import { HookEvent } from "../models/hook-event";
 import { HookEventDetails } from "../models/hook-event-details";
@@ -26,7 +26,7 @@ export abstract class HooksBase {
 
     protected validateInitialization()
     {
-        if (stringIsEmpty(this.options.baseUrl))
+        if (!this.options.baseUrl)
             throw new Error('You must initialize the hooks sdk by calling Hooks.initialize().');
     }
 

@@ -2,7 +2,6 @@ export * from './lib/common';
 export * from './errors/aggregate-error';
 export * from './errors/http-error';
 export * from './helpers/query-string';
-export * from './helpers/string-helper';
 export * from './helpers/authority-helper';
 export * from './models/api-response';
 export * from './models/paged-request';

@@ -3,7 +3,7 @@ import { TokenProviderConfiguration } from "../interfaces/token-provider-configu
 import { Issuer } from "openid-client";
 import AwaitLock from "await-lock";
 import { TokenRequest } from "../interfaces/token-request";
-import { AggregateError, stringIsNullOrEmpty } from '@cossdk/common';
+import { AggregateError } from '@cossdk/common';
 
 const NodeCache = require("node-cache");
 
@@ -25,11 +25,11 @@ export class TokenProvider
         const authorityUrl = this.config.authorityUrl;
 
         const errors:Array<Error> = [];
-        if (stringIsNullOrEmpty(request.clientId))
+        if (!request.clientId)
             errors.push(new Error("clientId is empty, null or undefined"));
-        if (stringIsNullOrEmpty(request.clientSecret))
+        if (!request.clientSecret)
             errors.push(new Error("clientSecret is empty, null or undefined"));
-        if (stringIsNullOrEmpty(authorityUrl))
+        if (!authorityUrl)
             errors.push(new Error("authorityUrl is empty, null or undefined"));
 
         if (errors.length > 0)
