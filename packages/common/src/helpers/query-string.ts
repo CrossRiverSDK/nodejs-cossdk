@@ -21,10 +21,8 @@ export class QueryString
 
             this.data[key] = arr;
         }
-        else if (value instanceof Array)
-            this.data[key] = value;
         else
-            this.data[key] = new Array(value);
+            this.set(key, value);
     }
 
     set(key: string, value: HttpQueryValue | Array<HttpQueryValue>)
