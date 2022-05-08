@@ -1,0 +1,33 @@
+{
+  "root": "packages/token-provider",
+  "sourceRoot": "packages/token-provider/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/token-provider",
+        "main": "packages/token-provider/src/index.ts",
+        "tsConfig": "packages/token-provider/tsconfig.lib.json",
+        "assets": ["packages/token-provider/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/token-provider/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/token-provider"],
+      "options": {
+        "jestConfig": "packages/token-provider/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

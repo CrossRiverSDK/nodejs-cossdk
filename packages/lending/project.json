@@ -1,0 +1,48 @@
+{
+  "root": "packages/lending",
+  "sourceRoot": "packages/lending/src",
+  "projectType": "library",
+  "targets": {
+    "pre-build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm install @openapitools/openapi-generator-cli -g",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/hooks       -i http://localhost:5000/hooks/swagger/v2/swagger.json --skip-validate-spec",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/preapproval -i https://lending.crbcos.com/preapproval/swagger/v1/swagger.json",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/rtp -i https://lending.crbcos.com/rtp/swagger/v1/swagger.json"
+        ]
+      }
+    },
+    "build": {
+      // "dependsOn": [{
+      //   "target": "pre-build",
+      //   "projects": "self"
+      // }],
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/lending",
+        "main": "packages/lending/src/index.ts",
+        "tsConfig": "packages/lending/tsconfig.lib.json",
+        "assets": ["packages/lending/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/lending/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/lending"],
+      "options": {
+        "jestConfig": "packages/lending/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

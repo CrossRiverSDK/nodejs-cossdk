@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "projects": {
+    "common": "packages/common",
+    "hooks": "packages/hooks",
+    "lending": "packages/lending",
+    "payments": "packages/payments",
+    "token-provider": "packages/token-provider"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "root": "packages/payments",
+  "sourceRoot": "packages/payments/src",
+  "projectType": "library",
+  "targets": {
+    "pre-build": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "npm install @openapitools/openapi-generator-cli -g",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/pushtopay -i https://pushtopaystaging.crbnj.net/swagger/docs/v1 --skip-validate-spec",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/pull -i https://p2ppulltransactionstg.crbcloud.com/swagger/v1/swagger.json --skip-validate-spec"
+        ]
+      }
+    },
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/payments",
+        "main": "packages/payments/src/index.ts",
+        "tsConfig": "packages/payments/tsconfig.lib.json",
+        "assets": ["packages/payments/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/payments/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/payments"],
+      "options": {
+        "jestConfig": "packages/payments/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
