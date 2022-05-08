@@ -8,17 +8,12 @@
       "options": {
         "commands": [
           "npm install @openapitools/openapi-generator-cli -g",
-          "openapi-generator-cli generate -g typescript-fetch -o src/models/hooks       -i http://localhost:5000/hooks/swagger/v2/swagger.json --skip-validate-spec",
-          "openapi-generator-cli generate -g typescript-fetch -o src/models/preapproval -i https://lending.crbcos.com/preapproval/swagger/v1/swagger.json",
-          "openapi-generator-cli generate -g typescript-fetch -o src/models/rtp -i https://lending.crbcos.com/rtp/swagger/v1/swagger.json"
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/pushtopay -i https://pushtopaystaging.crbnj.net/swagger/docs/v1 --skip-validate-spec",
+          "openapi-generator-cli generate -g typescript-fetch -o src/models/pull -i https://p2ppulltransactionstg.crbcloud.com/swagger/v1/swagger.json --skip-validate-spec"
         ]
       }
     },
     "build": {
-      // "dependsOn": [{
-      //   "target": "pre-build",
-      //   "projects": "self"
-      // }],
       "executor": "@nrwl/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
