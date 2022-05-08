@@ -24,7 +24,7 @@ export class Hooks<THookEventType extends string>  {
       throw new Error('You must supply a base url.');
 
     this.Applications = new Applications(config);
-    this.Types = new Types(config);
+    this.Types = new Types<THookEventType>(config);
     this.Registrations = new Registrations<THookEventType>(config);
     this.Events = new Events(config);
   }
